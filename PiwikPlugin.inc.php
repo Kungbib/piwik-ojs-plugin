@@ -116,6 +116,7 @@ class PiwikPlugin extends GenericPlugin {
 		$contextPath = $context->getPath();
 
 		$piwikCode = <<< EOF
+			<script type="text/plain" data-category="analytics">
 			var _paq = _paq || [];
 			  _paq.push(['trackPageView']);
 			  _paq.push(['enableLinkTracking']);
@@ -127,17 +128,11 @@ class PiwikPlugin extends GenericPlugin {
 			    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
 			    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
 			  })();
+			</script>
 EOF;
 
 		$templateMgr = TemplateManager::getManager($request);
-		$templateMgr->addJavaScript(
-				'piwik',
-				$piwikCode,
-				array(
-					'priority' => STYLE_SEQUENCE_LAST,
-					'inline'   => true,
-				)
-		);
+		$templateMgr->addHeader('matomoTracking', $piwikCode);
 
 		return false;
 	}
